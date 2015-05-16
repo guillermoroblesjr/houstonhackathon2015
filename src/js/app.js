@@ -63,10 +63,13 @@ define(function(require){
 
     svg.attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
+    var domainData = ["Lorem ipsum", "dolor sit", "amet", "consectetur", "adipisicing", "elit", "sed", "do", "eiusmod", "tempor", "incididunt"];
+    var rangeData = ["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"];
+
     // create the color scale
     var color = d3.scale.ordinal()
-      .domain(["Lorem ipsum", "dolor sit", "amet", "consectetur", "adipisicing", "elit", "sed", "do", "eiusmod", "tempor", "incididunt"])
-      .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
+      .domain( domainData )
+      .range( rangeData );
 
     function randomData (){
       // get the currently used domain
@@ -88,19 +91,59 @@ define(function(require){
       return d.data.label;
     };
 
-    // data returned example
-    // [{
-    //   "label": "Lorem ipsum",
-    //   "value": 0.9449701141566038
-    // }];
-    var data = randomData();
+    var buildData = function(){
+      // get the currently used domain
+      var labels = color.domain();
 
-    change( data );
+      // Returns a new array of objects
+      // built from the currently used color domain.
+      // The values are created randomly.
+      // [{
+      //   "label": "Musicians",
+      //   // # of non-basic jobs due to the label (job title)
+      //   "value": 0.24983089813031256
+      // }, ...]
+      
+      // return labels.map(function(label){
+      //   return { label: label, value: Math.random() * 10000 }
+      // });
+      var giveJobsForAJob = function( item ){
+
+        var jobTitle = item;
+        var jobsCreated = Math.random() * 10000;
+
+        // must return an object with: {
+        // 'label': '<Job title>', value: <# of non-basic jobs due to the label>}
+        return {
+          label: jobTitle,
+          value: jobsCreated
+        };
+      };
+
+      var data = _.map( labels, giveJobsForAJob );
+      return data;
+    };
+
+    var runInitialVisualization = function(){
+      // data returned example
+      // [{
+      //   "label": "Lorem ipsum",
+      //   "value": 0.9449701141566038
+      // }, ... ];
+      
+      // var data = randomData();
+      var data = buildData();
+      change( data );
+    };
+
+    runInitialVisualization();
 
     // button click handler
+    // runs change( data ) with new random data
     d3.select(".randomize")
       .on("click", function(){
-        change(randomData());
+        var data = randomData();
+        change( data );
       });
 
     function change(data) {
