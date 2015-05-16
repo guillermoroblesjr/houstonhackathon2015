@@ -4,13 +4,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Page Title</title>
     <script async src="../bower_components/requirejs/require.js" data-main="js/main.js"></script>
-    <link rel="stylesheet" href="../../bower_components/foundation/css/foundation.min.css">
+    <link rel="stylesheet" href="../../bower_components/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="./css/style.css">
 </head>
 <body ng-controller="MainCtrl">
-  <div class="row">
-    <div class="large-12 columns">
-      test
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="center-block text-center">
+          <style>
+            svg {
+              width: 100%;
+              height: 100%;
+              min-height: 600px;
+            }
+
+            path.slice{
+              stroke-width:2px;
+            }
+
+            polyline{
+              opacity: .3;
+              stroke: black;
+              stroke-width: 2px;
+              fill: none;
+            }
+
+            #donut g {
+              margin: auto;
+              text-align: center;
+            }
+          </style>
+          <button class="randomize">randomize</button>        
+          <div id="donut"></div>  
+        </div>
+      </div>
     </div>
   </div>
 </body>

@@ -13,6 +13,7 @@
       // Bower Components
       angular: bc + 'angular/angular.min',
       lodash: bc + 'lodash/lodash.min',
+      d3: bc + 'd3/d3.min'
     },
     shim: {
       jquery: {
@@ -23,6 +24,9 @@
       },
       angular: {
         exports: 'angular'
+      },
+      d3: {
+        exports: 'd3'
       }
     },
   });
