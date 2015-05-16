@@ -29,6 +29,8 @@ define(function(require){
   angular.bootstrap(document, ['app']);
 
   var init = function(){
+
+    // create the basic svg and group elements
     var svg = d3.select("#donut")
       .append("svg")
       .append("g")
@@ -40,9 +42,10 @@ define(function(require){
     svg.append("g")
       .attr("class", "lines");
 
+    // create the general pie structure
     var width = 960,
         height = 450,
-      radius = Math.min(width, height) / 2;
+        radius = Math.min(width, height) / 2;
 
     var pie = d3.layout.pie()
       .sort(null)
@@ -60,51 +63,94 @@ define(function(require){
 
     svg.attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
-    var key = function(d){ return d.data.label; };
-
+    // create the color scale
     var color = d3.scale.ordinal()
       .domain(["Lorem ipsum", "dolor sit", "amet", "consectetur", "adipisicing", "elit", "sed", "do", "eiusmod", "tempor", "incididunt"])
       .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
 
     function randomData (){
+      // get the currently used domain
       var labels = color.domain();
+
+      // Returns a new array of objects
+      // built from the currently used color domain.
+      // The values are created randomly.
+      // [{
+      //   "label": "Lorem ipsum",
+      //   "value": 0.24983089813031256
+      // }]
       return labels.map(function(label){
         return { label: label, value: Math.random() }
       });
     }
 
-    change(randomData());
+    var key = function(d){ 
+      return d.data.label;
+    };
 
+    // data returned example
+    // [{
+    //   "label": "Lorem ipsum",
+    //   "value": 0.9449701141566038
+    // }];
+    var data = randomData();
+
+    change( data );
+
+    // button click handler
     d3.select(".randomize")
       .on("click", function(){
         change(randomData());
       });
 
-
     function change(data) {
 
       /* ------- PIE SLICES -------*/
-      var slice = svg.select(".slices").selectAll("path.slice")
-        .data(pie(data), key);
+      var renderPieSlices = function( pieData /*, attrChangeVal*/ ){
+        // Bind data
+        var slice = svg.select(".slices").selectAll("path.slice")
+          .data( pieData, key );
 
-      slice.enter()
-        .insert("path")
-        .style("fill", function(d) { return color(d.data.label); })
-        .attr("class", "slice");
+        // Enter
+        slice.enter()
+          .insert("path")
+          .style("fill", function(d) { return color(d.data.label); })
+          .attr("class", "slice");
 
-      slice   
-        .transition().duration(1000)
-        .attrTween("d", function(d) {
-          this._current = this._current || d;
-          var interpolate = d3.interpolate(this._current, d);
-          this._current = interpolate(0);
-          return function(t) {
-            return arc(interpolate(t));
-          };
-        })
+        // Update
+        slice   
+          .transition().duration(1000)
+          .attrTween("d", function(d) {
+            this._current = this._current || d;
+            var interpolate = d3.interpolate(this._current, d);
+            this._current = interpolate(0);
+            return function(t) {
+              return arc(interpolate(t));
+            };
+          })
 
-      slice.exit()
-        .remove();
+        // Exit
+        slice.exit().remove();
+      };
+
+      var getPieData = function( data ){
+        return pie(data);
+      };
+
+      // pieData example
+      // [{
+      //   "data": {
+      //     "label": "Lorem ipsum",
+      //     "value": 0.9449701141566038
+      //   },
+      //   "value": 0.9449701141566038,
+      //   "startAngle": 0,
+      //   "endAngle": 1.094470332723908,
+      //   "padAngle": 0
+      // }];
+      var pieData = getPieData( data );
+
+      renderPieSlices( pieData );
 
       /* ------- TEXT LABELS -------*/
 
