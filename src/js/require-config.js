@@ -1,20 +1,30 @@
-require.config({
-  paths: {
-    app: '',
-    main: './main',
+(function(){
 
-    // Bower Components
+  'use strict';
 
-  },
-  shim: {
-    jquery: {
-      exports: 'jQuery'
+  var bc = '../../bower_components/';
+
+  require.config({
+    paths: {
+      app: './app',
+      main: './main',
+      Class: './components/Class.js/Class',
+
+      // Bower Components
+      angular: bc + 'angular/angular.min',
+      lodash: bc + 'lodash/lodash.min',
     },
-    Class: {
-      exports: 'Class'
+    shim: {
+      jquery: {
+        exports: 'jQuery'
+      },
+      Class: {
+        exports: 'Class'
+      },
+      angular: {
+        exports: 'angular'
+      }
     },
-    angular: {
-      exports: 'angular'
-    }
-  },
-});
+  });
+
+})();
