@@ -63,8 +63,20 @@ define(function(require){
 
     svg.attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
-    var domainData = ["Lorem ipsum", "dolor sit", "amet", "consectetur", "adipisicing", "elit", "sed", "do", "eiusmod", "tempor", "incididunt"];
-    var rangeData = ["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"];
+    var getDomainData = function(){
+      var defaultData = ["Lorem ipsum", "dolor sit", "amet", "consectetur", "adipisicing", "elit", "sed", "do", "eiusmod", "tempor", "incididunt"];
+      var domainData;
+      return domainData === undefined ? defaultData : domainData;
+    };
+
+    var getRangeData = function(){
+      var defaultData = ["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"];
+      var rangeData;
+      return rangeData === undefined ? defaultData : rangeData;
+    };
+
+    var domainData = getDomainData();
+    var rangeData = getRangeData();
 
     // create the color scale
     var color = d3.scale.ordinal()
