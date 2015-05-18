@@ -28,7 +28,7 @@ define(function(require){
   // Manually bind angular due to asyncronously loading
   angular.bootstrap(document, ['app']);
 
-  var init = function(){
+  var init = function( domainData, jobsData ){
 
     // create the basic svg and group elements
     var svg = d3.select("#donut")
@@ -75,7 +75,7 @@ define(function(require){
       return rangeData === undefined ? defaultData : rangeData;
     };
 
-    var domainData = getDomainData();
+    // domainData = getDomainData();
     var rangeData = getRangeData();
 
     // create the color scale
@@ -144,8 +144,8 @@ define(function(require){
       // }, ... ];
       
       // var data = randomData();
-      var data = buildData();
-      change( data );
+      // var data = buildData();
+      change( jobsData );
     };
 
     runInitialVisualization();
@@ -274,6 +274,22 @@ define(function(require){
     };
   };
 
-  init();
+  d3.csv("../src/data/2014-El-Paso-Job-Titles-and-Jobs-per-Job.csv")
+    .header("header-name", "header-value")
+    .get(function(error, data) {
+
+      var domainData = _.map( data, function(item){
+        return item.occupationTitle;
+      });
+
+      var jobsData = _.map( data, function(item){
+        return {
+          label: item.occupationTitle,
+          value: parseInt( item.jobsCreated )
+        };
+      });
+
+      init( domainData, jobsData );
+    });
 
 });
