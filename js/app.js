@@ -274,7 +274,7 @@ define(function(require){
     };
   };
 
-  d3.csv("../src/data/2014-El-Paso-Job-Titles-and-Jobs-per-Job.csv")
+  d3.csv("./data/2014-El-Paso-Job-Titles-and-Jobs-per-Job.csv")
     .header("header-name", "header-value")
     .get(function(error, data) {
 
