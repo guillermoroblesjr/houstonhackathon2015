@@ -2,7 +2,7 @@
 
   'use strict';
 
-  var bc = '../../bower_components/';
+  var bc = '../bower_components/';
 
   require.config({
     paths: {
